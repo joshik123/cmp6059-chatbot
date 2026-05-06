@@ -9,4 +9,5 @@ file.write(
     new_arrival_time.strftime("%H:%M") + "\n"
 )
 
+
 file.close()
