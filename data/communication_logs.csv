@@ -1,0 +1,12 @@
+file = open("data/conversation_log.csv", "a")
+
+file.write(
+    train + "," +
+    current_station + "," +
+    destination + "," +
+    str(current_delay) + "," +
+    str(predicted_delay) + "," +
+    new_arrival_time.strftime("%H:%M") + "\n"
+)
+
+file.close()

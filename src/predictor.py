@@ -1,14 +1,12 @@
-import pickle
+import joblib
 import numpy as np
 
 MODEL_FILE = "models/delay_model.pkl"
 
-
 def predict_delay(current_delay, station_index, remaining_stops, hour, day):
-    with open(MODEL_FILE, "rb") as file:
-        model = pickle.load(file)
+    model = joblib.load("models/delay_model.pkl")
 
-    values = np.array([[current_delay, station_index, remaining_stops, hour, day]])
-    result = model.predict(values)
+    data = np.array([[current_delay, station_index, remaining_stops, hour, day]])
+    prediction = model.predict(data)
 
-    return round(result[0], 2)
+    return round(float(prediction[0]), 2)
