@@ -25,5 +25,11 @@ python train_model.py
 
 ## Run the chatbot:
 
+python main.py
+
+## Run evaluation
+
 python src/evaluation.py
+
+
 

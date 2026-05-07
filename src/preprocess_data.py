@@ -1,9 +1,8 @@
 import pandas as pd
-
-
+# defines waterloo station
 WATERLOO_CODE = "WAT"
 
-
+#helper function
 def time_to_minutes(t):
     if pd.isna(t):
         return None
@@ -16,20 +15,22 @@ def time_to_minutes(t):
 
 
 df = pd.read_excel("data/2024_WEY2WAT.xlsx")
-
 df["planned_arrival_mins"] = df["planned_arrival_time"].apply(time_to_minutes)
 df["actual_arrival_mins"] = df["actual_arrival_time"].apply(time_to_minutes)
 df["arrival_delay"] = df["actual_arrival_mins"] - df["planned_arrival_mins"]
 
-# remove rows where delay cannot be calculated
+# remove broken rows
 df = df.dropna(subset=["arrival_delay"])
 
 # create station order from the data
 station_order = list(df["location"].drop_duplicates())
 station_to_index = {station: i for i, station in enumerate(station_order)}
 
+# each station has a number
 df["station_index"] = df["location"].map(station_to_index)
+
 waterloo_index = station_to_index[WATERLOO_CODE]
+
 
 df["remaining_stops"] = waterloo_index - df["station_index"]
 df["day_of_week"] = df["date_of_service"].dt.dayofweek
@@ -37,6 +38,8 @@ df["arrival_hour"] = df["planned_arrival_mins"] // 60
 
 # get final delay at Waterloo for each train
 waterloo_rows = df[df["location"] == WATERLOO_CODE]
+
+#renames column
 targets = waterloo_rows.groupby("rid")["arrival_delay"].last().reset_index()
 targets.columns = ["rid", "final_delay"]
 
