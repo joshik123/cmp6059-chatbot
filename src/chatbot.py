@@ -24,6 +24,16 @@ def ask_station(question):
         print("Sorry, I do not recognise that station. Please try again.")
 
 
+def ask_time(question):
+    while True:
+        answer = input(question)
+
+        try:
+            return datetime.strptime(answer, "%H:%M")
+        except ValueError:
+            print("Please enter the time in HH:MM format, for example 14:30.")
+
+
 def run_chatbot():
     print("Train Delay Chatbot")
     print("I can help predict your train arrival delay.")
@@ -40,7 +50,9 @@ def run_chatbot():
     hour = ask_number("What hour is it now? Use 24 hour time: ")
     day = ask_number("What day is it? Monday=0, Tuesday=1, Sunday=6: ")
 
-    scheduled_arrival = input("What is the scheduled arrival time? Example 14:30: ")
+    scheduled_arrival = ask_time(
+        "What is the scheduled arrival time? Example 14:30: "
+    )
 
     predicted_delay = predict_delay(
         current_delay,
@@ -50,8 +62,7 @@ def run_chatbot():
         day
     )
 
-    arrival_time = datetime.strptime(scheduled_arrival, "%H:%M")
-    new_arrival_time = arrival_time + timedelta(minutes=predicted_delay)
+    new_arrival_time = scheduled_arrival + timedelta(minutes=predicted_delay)
 
     print()
     print("Journey Summary")
@@ -69,3 +80,8 @@ def run_chatbot():
         print("This is a moderate delay.")
     else:
         print("This is a significant delay.")
+
+
+if __name__ == "__main__":
+    run_chatbot()
+    
